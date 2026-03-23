@@ -1,0 +1,41 @@
+---
+- name: Install Node.js
+  hosts: webapp
+  become: yes
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes 
+    - name: Install Node.js
+      apt:
+        name: nodejs
+        state: present
+
+    - name: Install npm
+      apt:
+        name: npm
+        state: present
+    
+- name: Deploy nodejs app
+  hosts: webapp
+  become: yes        
+  tasks:
+    - name: Extract nodejs app
+      unarchive:
+        src: /Users/mac/devop-project/nodejs-web-app/simple-web-app-1.0.0.tgz
+        dest: /home/ubuntu/
+    - name: Install app dependencies
+      npm:
+        path: /home/ubuntu/package
+    - name: Start nodejs app
+      command:
+        chdir: /home/ubuntu/package
+        cmd: node server.js
+      async: 1000
+      poll: 0
+    - name: Ensure nodejs app is running
+      shell: ps aux | grep node
+      register: app_status
+    - debug: msg={{ app_status.stdout}}
+
