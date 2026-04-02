@@ -1,0 +1,4 @@
+version: 1.0.0
+location: /Users/mac/devop-project/nodejs-web-app/simple-web-app
+app_user: devops
+user_home_dir: /home/devops/

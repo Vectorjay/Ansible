@@ -20,10 +20,12 @@
 - name: Create new user for nodejs app
   hosts: webapp
   become: yes
+  vars_files:
+    - vars.yaml
   tasks:
     - name: Create devops user
       user:
-        name: devops
+        name: "{{app_user}}"
         comment: "User for running nodejs app"
         groups: sudo
         append: yes
@@ -32,19 +34,20 @@
     
 - name: Deploy nodejs app
   hosts: webapp
-  become: true
-  become_user: devops      
+  become: yes
+  vars_files:
+    - vars.yaml     
   tasks:
     - name: Extract nodejs app
       unarchive:
-        src: /Users/mac/devop-project/nodejs-web-app/simple-web-app-1.0.0.tgz
-        dest: /home/devops/
+        src: "{{location}}/simple-web-app-{{version}}.tgz"
+        dest: "{{user_home_dir}}"
     - name: Install app dependencies
       npm:
-        path: /home/devops/package
+        path: "{{user_home_dir}}/package"
     - name: Start nodejs app
       command:
-        chdir: /home/devops/package
+        chdir: "{{user_home_dir}}/package"
         cmd: node server.js
       async: 1000
       poll: 0
