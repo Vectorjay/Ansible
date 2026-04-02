@@ -16,21 +16,35 @@
       apt:
         name: npm
         state: present
+
+- name: Create new user for nodejs app
+  hosts: webapp
+  become: yes
+  tasks:
+    - name: Create devops user
+      user:
+        name: devops
+        comment: "User for running nodejs app"
+        groups: sudo
+        append: yes
+        create_home: yes
+        shell: /bin/bash
     
 - name: Deploy nodejs app
   hosts: webapp
-  become: yes        
+  become: true
+  become_user: devops      
   tasks:
     - name: Extract nodejs app
       unarchive:
         src: /Users/mac/devop-project/nodejs-web-app/simple-web-app-1.0.0.tgz
-        dest: /home/ubuntu/
+        dest: /home/devops/
     - name: Install app dependencies
       npm:
-        path: /home/ubuntu/package
+        path: /home/devops/package
     - name: Start nodejs app
       command:
-        chdir: /home/ubuntu/package
+        chdir: /home/devops/package
         cmd: node server.js
       async: 1000
       poll: 0
