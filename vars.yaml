@@ -1,4 +1,6 @@
 version: 1.0.0
-location: /Users/mac/devop-project/nodejs-web-app/simple-web-app
+location: /Users/mac/devop-project/nodejs-web-app
 app_user: devops
 user_home_dir: /home/devops/
+Nexus: nexus
+version_nexus: 3.30.0-01
