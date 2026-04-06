@@ -1,7 +1,14 @@
 ---
+- name: Wait for SSH
+  hosts: all
+  gather_facts: no
+  tasks:
+    - wait_for_connection:
+        delay: 5
+        timeout: 200
 
 - name: Install python 3
-  hosts: docker_server
+  hosts: all
   become: yes
   tasks:
     - name: Update apt cache
@@ -13,7 +20,7 @@
         state: present
 
 - name: Install Docker and Docker Compose v2
-  hosts: docker_server
+  hosts: all
   become: yes
 
   tasks:
@@ -81,7 +88,7 @@
 
     # 7. Add user to docker group (optional)
 - name: Add ubuntu user to docker group
-  hosts: docker_server
+  hosts: all
   become: yes
   tasks:
     - name: Add ubuntu to docker group
@@ -93,7 +100,7 @@
       meta: reset_connection
 
 - name: Start Docker container
-  hosts: docker_server
+  hosts: all
   vars_files:
     - vars.yaml
   become: yes
