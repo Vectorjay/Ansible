@@ -4,3 +4,4 @@ app_user: devops
 user_home_dir: /home/devops/
 Nexus: nexus
 version_nexus: 3.30.0-01
+dockerhub_password: Lewisham@2023
